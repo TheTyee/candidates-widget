@@ -11,6 +11,8 @@ $('document').ready(function(){
 	var party; 	//party name
 	var name;   //candidate name
 	var social; //object with social media links
+	var inputLength; //for validation
+	var Exp = /((^[0-9]+[a-z]+)|(^[a-z]+[0-9]+))+[0-9a-z]+$/i; //alphanumeric checker
 
 	//if request loads from an external source, retrieve the postal code parameters form the URL
 	function GetURLParameter(sParam){
@@ -30,10 +32,6 @@ $('document').ready(function(){
 	//put the postal code in a variable
 	riding = GetURLParameter('riding');
 
-	//if there's a parameter getting pulled from the URL, name it postalCode
-	if (typeof riding != ''){
-		postalCode = riding;
-	}
 
 	// feed the Postal Code into the API
 	function getRidingInfo(postalCode){	
@@ -68,32 +66,99 @@ $('document').ready(function(){
 				//print indidivual candidate info
 				jQuery.each(data.candidates_centroid, function(key, value){
 					//console.log(value.name + ' ' + key);
-					$('#candidates_info').append( '<div class="candidate"><p><img src="' + value.photo_url+  '"/><p>' + value.name  + ' (' + value.party_name +')</p><p>Email: <a href="mailto:'+ value.email + '">' + value.email+'</a></p><p>Website: <a target="_blank" href="'+value.personal_url + '">' +value.personal_url+'</a></p></div>');
+					
 					social = value.extra;
-
+					twitter = '';
+					facebook = '';
 					//if twitter is included, print it
 					if (typeof social.twitter != 'undefined'){
-					$('.candidate').append('<p><a href=">'+ value.extra.twitter +'">' +value.extra.twitter+'</a></p>');
+						twitter = '<p><a href=">'+ value.extra.twitter +'">' +value.extra.twitter+'</a></p>';
 					}
 
 					//if facebook is included, print it
 					if (typeof social.facebook != 'undefined'){
-					$('.candidate').append('<p><a href=">'+ value.extra.facebook +'">' +value.extra.facebook+'</a></p>');
+						facebook = '<p><a href=">'+ value.extra.facebook +'">' +value.extra.facebook+'</a></p>';
 					}
+
+
+					$('#candidates_info').append( '<div class="candidate"><p><img src="' + value.photo_url+  '"/><p>' + value.name  + ' (' + value.party_name +')</p><p>Email: <a href="mailto:'+ value.email + '">' + value.email+'</a></p><p>Website: <a target="_blank" href="'+value.personal_url + '">' +value.personal_url+'</a></p><p>'+twitter+'</p><p>'+facebook+'</p></div>');
+				
+
+					
 				});
 			   },
-			error: function() { alert('Failed!'); },
+			error: function() { 
+			//alert('Failed!'); 
+		},
 		});	
 	}
 
-getRidingInfo(postalCode);
 
-//if the user searches on this page
+
+
+
+
+//IF THE USER HITS THE PAGE DIRECTLY, OR HAS PUT A POSTAL CODE INTO THE WIDGET
+//check to see if user is hitting the candidate page directly
+if (typeof riding != 'undefined'){
+	//if there's a parameter getting pulled from the URL, rename it postalCode
+	if (typeof riding != ''){
+		postalCode = riding;
+	}
+	getRidingInfo(postalCode);
+}
+
+//IF THE USER SEARCHES DIRECTLY ON THE PAGE, with a click
 	$('button').click(function(){	
-		//clear any cruft
+		//Validation
+		
+		postalCode = $('#riding_pc').val();
+		postalCode = postalCode.replace(/\s/g, '');
+		inputLength = postalCode.length;
+		
+		if( inputLength > 6) {
+			$('.has-error').remove();
+			$('<div class="has-error">-Your code is too long.</div>').insertBefore('.btn');
+		} 
+		if (!postalCode.match(Exp)){
+			$('.has-error').remove();
+				$('<div class="has-error">-Contains invalid characters</div>').insertBefore('.btn');
+				event.preventDefault();
+		}
+
+		if (inputLength < 5){
+			$('.has-error').remove();
+				$('<div class="has-error">-Your code is too short</div>').insertBefore('.btn');
+				event.preventDefault();
+		}		
+
+			//clear any cruft
+			$('#candidates_info').empty();
+			$('#riding_info').empty();	
+			
+
+
+			getRidingInfo(postalCode);
+
+
+
+
+
+
+	});
+
+//IF THE USER SEARCHES DIRECTLY ON THE PAGE, by hitting enter
+	 $('#riding_pc').keypress(function(e){
+        if(e.which == 13){//Enter key pressed
+          		//clear any cruft
 		$('#candidates_info').empty();
 		$('#riding_info').empty();	
 		postalCode = $('#riding_pc').val();
 		getRidingInfo(postalCode);
-	});
+        }
+    });
+
+
+
+
 });
