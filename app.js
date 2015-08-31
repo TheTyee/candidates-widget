@@ -32,6 +32,12 @@ $('document').ready(function(){
 	//put the postal code in a variable
 	riding = GetURLParameter('riding');
 
+//URL-ify
+function urlify( withSpaces ){
+	var str = withSpaces;
+	str = str.replace(/\s+/g, '-').toLowerCase();
+	return str;
+}
 
 	// feed the Postal Code into the API
 	function getRidingInfo(postalCode){	
@@ -60,31 +66,69 @@ $('document').ready(function(){
 			    //print riding name
 			    jQuery.each(data.boundaries_concordance, function(key, value){
 					//console.log(value.name + ' ' + key);
-					$('#riding_info').append(value.name);
+					$('#riding_info').append('Your Candidates for ' + value.name);
 				});
 				
 				//print indidivual candidate info
 				jQuery.each(data.candidates_centroid, function(key, value){
-					//console.log(value.name + ' ' + key);
-					
-					social = value.extra;
-					twitter = '';
-					facebook = '';
-					//if twitter is included, print it
-					if (typeof social.twitter != 'undefined'){
-						twitter = '<p><a href=">'+ value.extra.twitter +'">' +value.extra.twitter+'</a></p>';
-					}
+					switch(value.party_name) {
+				    case 'NDP':
+				        logo = '<img height="20" alt="'+value.party_name+'" src="/images/widget_logos/ndp-white.png"/>';
+				        break;
+				    case 'Conservative':
+				         logo = '<img height="20" alt="'+value.party_name+'" src="/images/widget_logos/cons-white.png"/>';
+				        break;
+				    case 'Green Party':
+				        logo = '<img height="20" alt="'+value.party_name+'" src="/images/widget_logos/green-white.png"/>';
+				        break;
+				    case 'Liberal':
+				        logo = '<img height="20" alt="'+value.party_name+'" src="/images/widget_logos/liberal-white.png"/>';
+				        break;
+				    default:
+				    	logo = value.party_name;
+				    	break;	      
+				}
+		
 
-					//if facebook is included, print it
-					if (typeof social.facebook != 'undefined'){
-						facebook = '<p><a href=">'+ value.extra.facebook +'">' +value.extra.facebook+'</a></p>';
-					}
+				var candidateContents;
+				candidateContents =	'<div class="individual candidate-'+ key +'">';
+				candidateContents =	candidateContents + '<div class="candidate-top ' + urlify(value.party_name) +'">';
+			    candidateContents =	candidateContents + '<div class="party-logo">'+ logo +'</div>';
+			    if (value.incumbent == true){
+			    	candidateContents = candidateContents + '<div class="incumbent"><span>Incumbent</span></div>';
+			    }
+			    candidateContents =	candidateContents + '<img class="candidate-image" src="' + value.photo_url+  '"/>';
+			    candidateContents =	candidateContents + '<h4>' +value.name+ '</h4>';
+
+			    candidateContents =	candidateContents + '</div>';
+			    candidateContents =	candidateContents + '<div class="candidate-bottom">'
+			    candidateContents =	candidateContents + '<ul>';
+			    if (value.personal_url != ""){
+			    	website = value.personal_url;
+			    	candidateContents =	candidateContents + '<li><a target="_blank" href="'+ website + '">Website</a></li>';
+			    }
+			    
+			    if (value.email !=""){
+			    	email = value.email;
+			    	candidateContents =	candidateContents + '<li><a href="mailto:'+ email + '">Email</a></li>';
+			    }
+
+			    if (typeof value.extra != 'undefined'){
+				    if (typeof value.extra.twitter != 'undefined'){
+				    	twitter = value.extra.twitter;
+				    	candidateContents =	candidateContents + '<li><a href="' + twitter+ '">Twitter</a></li>';
+				    }
+				    if (typeof value.extra.facebook != 'undefined'){
+				    	facebook = value.extra.facebook;
+				    	candidateContents =	candidateContents + '<li><a href="' + facebook+ '">Facebook</a></li>';
+				    }
+				}
+			    candidateContents =	candidateContents + '</ul>';
+			    candidateContents =	candidateContents + '</div>';
+
+				$('#candidates_info').append(candidateContents);
 
 
-					$('#candidates_info').append( '<div class="candidate"><p><img src="' + value.photo_url+  '"/><p>' + value.name  + ' (' + value.party_name +')</p><p>Email: <a href="mailto:'+ value.email + '">' + value.email+'</a></p><p>Website: <a target="_blank" href="'+value.personal_url + '">' +value.personal_url+'</a></p><p>'+twitter+'</p><p>'+facebook+'</p></div>');
-				
-
-					
 				});
 			   },
 			error: function() { 
@@ -92,11 +136,6 @@ $('document').ready(function(){
 		},
 		});	
 	}
-
-
-
-
-
 
 //IF THE USER HITS THE PAGE DIRECTLY, OR HAS PUT A POSTAL CODE INTO THE WIDGET
 //check to see if user is hitting the candidate page directly
@@ -109,7 +148,7 @@ if (typeof riding != 'undefined'){
 }
 
 //IF THE USER SEARCHES DIRECTLY ON THE PAGE, with a click
-	$('button').click(function(){	
+	$('.candidate-submit').click(function(){	
 		//Validation
 		
 		postalCode = $('#riding_pc').val();
