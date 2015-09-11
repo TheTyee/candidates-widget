@@ -70,6 +70,8 @@ function urlify( withSpaces ){
 				});
 				
 				//print indidivual candidate info
+
+
 				jQuery.each(data.candidates_centroid, function(key, value){
 					switch(value.party_name) {
 				    case 'NDP':
@@ -87,7 +89,7 @@ function urlify( withSpaces ){
 				    default:
 				    	logo = value.party_name;
 				    	break;	      
-				}
+					}
 		
 
 				var candidateContents;
@@ -126,13 +128,19 @@ function urlify( withSpaces ){
 			    candidateContents =	candidateContents + '</ul>';
 			    candidateContents =	candidateContents + '</div>';
 
+			    if (key ==3){
+			    	console.log(key %3);
+			    	candidateContents = candidateContents + '</div><div class="row">';
+			    }
+			    //if candidate key is == 3, then throw in a </div><div class="row">
 				$('#candidates_info').append(candidateContents);
 
 
 				});
 			   },
 			error: function() { 
-			//alert('Failed!'); 
+				alert('meep');
+				$('.riding_content').append('Sorry, there was an error with your submission. Please try again.'); 
 		},
 		});	
 	}
@@ -150,12 +158,11 @@ if (typeof riding != 'undefined'){
 //IF THE USER SEARCHES DIRECTLY ON THE PAGE, with a click
 	$('.candidate-submit').click(function(){	
 		//Validation
-		
 		postalCode = $('#riding_pc').val();
 		postalCode = postalCode.replace(/\s/g, '');
 		inputLength = postalCode.length;
 		
-		if( inputLength > 6) {
+		if( inputLength > 6 || inputLength === 0) {
 			$('.has-error').remove();
 			$('<div class="has-error">-Your code is too long.</div>').insertBefore('.btn');
 		} 
