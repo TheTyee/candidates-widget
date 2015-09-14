@@ -41,14 +41,15 @@ function urlify( withSpaces ){
 
 	// feed the Postal Code into the API
 	function getRidingInfo(postalCode){	
-			//riding = GetURLParameter('riding');
+			riding = GetURLParameter('riding');
 			//if riding has a value, rename to be postal code
 
 			//make it upper case
 			postalCode = postalCode.toUpperCase();
 			//strip the spaces
-			postalCode = postalCode.replace(/\s/g, '');
-			
+			postalCode = postalCode.replace('+', '');
+
+			console.log(postalCode);
 			//API request
 			$.ajax({
 				//find the endpoint for the request postal code
@@ -139,7 +140,6 @@ function urlify( withSpaces ){
 				});
 			   },
 			error: function() { 
-				alert('meep');
 				$('.riding_content').append('Sorry, there was an error with your submission. Please try again.'); 
 		},
 		});	
@@ -154,55 +154,6 @@ if (typeof riding != 'undefined'){
 	}
 	getRidingInfo(postalCode);
 }
-
-//IF THE USER SEARCHES DIRECTLY ON THE PAGE, with a click
-	$('.candidate-submit').click(function(){	
-		//Validation
-		postalCode = $('#riding_pc').val();
-		postalCode = postalCode.replace(/\s/g, '');
-		inputLength = postalCode.length;
-		
-		if( inputLength > 6 || inputLength === 0) {
-			$('.has-error').remove();
-			$('<div class="has-error">-Your code is too long.</div>').insertBefore('.btn');
-		} 
-		if (!postalCode.match(Exp)){
-			$('.has-error').remove();
-				$('<div class="has-error">-Contains invalid characters</div>').insertBefore('.btn');
-				event.preventDefault();
-		}
-
-		if (inputLength < 5){
-			$('.has-error').remove();
-				$('<div class="has-error">-Your code is too short</div>').insertBefore('.btn');
-				event.preventDefault();
-		}		
-
-			//clear any cruft
-			$('#candidates_info').empty();
-			$('#riding_info').empty();	
-			
-
-
-			getRidingInfo(postalCode);
-
-
-
-
-
-
-	});
-
-//IF THE USER SEARCHES DIRECTLY ON THE PAGE, by hitting enter
-	 $('#riding_pc').keypress(function(e){
-        if(e.which == 13){//Enter key pressed
-          		//clear any cruft
-		$('#candidates_info').empty();
-		$('#riding_info').empty();	
-		postalCode = $('#riding_pc').val();
-		getRidingInfo(postalCode);
-        }
-    });
 
 
 
