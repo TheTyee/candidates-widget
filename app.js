@@ -89,7 +89,6 @@ function urlify( withSpaces ){
 				    	logo = value.party_name;
 				    	break;	      
 					}
-		
 
 				var candidateContents;
 				candidateContents =	'<div class="individual candidate-'+ key +'">';
