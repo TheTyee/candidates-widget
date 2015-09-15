@@ -71,8 +71,6 @@ function urlify( withSpaces ){
 				});
 				
 				//print indidivual candidate info
-
-
 				jQuery.each(data.candidates_centroid, function(key, value){
 					switch(value.party_name) {
 				    case 'NDP':
