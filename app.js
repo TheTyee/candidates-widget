@@ -65,11 +65,24 @@ function urlify( withSpaces ){
 			    console.log(data);
 
 			    //print riding name
-			    jQuery.each(data.boundaries_concordance, function(key, value){
-					//console.log(value.name + ' ' + key);
-					$('#riding_info').append('Your Candidates for ' + value.name);
+
+			  	var alreadyPrinted;
+			  	alreadyPrinted = false;
+			    jQuery.each(data.boundaries_centroid, function(key, value){
+	
+			
+						if (value.boundary_set_name == "Federal electoral district"){
+							if (alreadyPrinted == false){
+								$('#riding_info').append('Your Candidates for ' + value.name);
+								alreadyPrinted = true;
+							}
+						}
+				
+
 				});
 				
+
+
 				//print indidivual candidate info
 				jQuery.each(data.candidates_centroid, function(key, value){
 					switch(value.party_name) {
