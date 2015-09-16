@@ -15,7 +15,7 @@ $('document').ready(function(){
 	var Exp = /((^[0-9]+[a-z]+)|(^[a-z]+[0-9]+))+[0-9a-z]+$/i; //alphanumeric checker
 
 	var retrieveResults;
-	retrieveResults = '/candidates/';
+	retrieveResults = 'http://dev.housingfix.tyeesolutions.org/candidates/';
 	
 	//generate jQuery widget
      widget_markup = '<aside class="widget-credit">Powered by <a href="http://opennorth.ca" target="_blank"><img src="http://dev.housingfix.tyeesolutions.org/images/logos/open_north_rev.png"/></a></aside>';
