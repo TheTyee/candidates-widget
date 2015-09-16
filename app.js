@@ -14,23 +14,19 @@ $('document').ready(function(){
 	var inputLength; //for validation
 	var Exp = /((^[0-9]+[a-z]+)|(^[a-z]+[0-9]+))+[0-9a-z]+$/i; //alphanumeric checker
 
-
-
 	var retrieveResults;
-
-	retrieveResults = 'http://dev.housingfix.tyeesolutions.org/candidates';
+	retrieveResults = '/candidates/';
 	
-	//find a candidate 
+	//generate jQuery widget
      widget_markup = '<aside class="widget-credit">Powered by <a href="http://opennorth.ca" target="_blank"><img src="http://dev.housingfix.tyeesolutions.org/images/logos/open_north_rev.png"/></a></aside>';
-
      widget_markup = widget_markup + '<div class="widget-inputs">';
      widget_markup = widget_markup + '<h3>Find federal candidates in your riding</h3>';
      widget_markup = widget_markup +  '<form id="home-form" name="home-form">'; 
      widget_markup = widget_markup +  '<input id="riding_pc" name="riding" type="text" class="widget_field form-control" placeholder="Enter your Postal Code">';
-     widget_markup = widget_markup + '<input id="btn" type="submit" value="Submit" formaction="'+ retrieveResults+'" /></form>';
+     widget_markup = widget_markup + '<input id="btn" type="submit" value="Submit" formaction="'+ retrieveResults+'" /></form></div>';
 
-  $('.find-a-candidate').html(widget_markup);
-	//  console.log(widget_markup);
+  	$('.find-a-candidate').html(widget_markup);
+
 
 	//Validation
 	jQuery.validator.addMethod("cdnPostal", function(postal, element) {
@@ -49,9 +45,37 @@ $('document').ready(function(){
 	            riding: "Please enter a valid postal code"
 
 	        }
-	    })
+	    });
 
-  $('#home-form').submit(function(){	
+
+//if request loads from an external source, retrieve the postal code parameters form the URL
+	function GetURLParameter(sParam){
+		//get the URL
+	    var sPageURL = window.location.search.substring(1);
+	   	//split it up
+	    var sURLVariables = sPageURL.split('&');
+	    for (var i = 0; i < sURLVariables.length; i++){
+	        var sParameterName = sURLVariables[i].split('=');
+	       // if it matches the desired parameter, dump it into the function
+	        if (sParameterName[0] == sParam){
+	            return sParameterName[1];
+			}
+		}
+	}
+
+	//put the postal code in a variable
+	riding = GetURLParameter('riding');
+
+//URL-ify
+function urlify( withSpaces ){
+	var str = withSpaces;
+	str = str.replace(/\s+/g, '-').toLowerCase();
+	return str;
+}
+
+
+
+ // $('#btn').submit(function(event){	
 		
 		//clear any cruft on each click
 		$('#candidates_info').empty();
@@ -61,8 +85,6 @@ $('document').ready(function(){
 		postalCode = $('#riding_pc').val();
 		//capitalize it
 		postalCode = postalCode.toUpperCase();
-		//feed it to the API
-
 	// feed the Postal Code into the API
 	function getRidingInfo(postalCode){	
 			riding = GetURLParameter('riding');
@@ -86,7 +108,7 @@ $('document').ready(function(){
 			    crossDomain: true,
 			    dataType: 'jsonp',
 			    success: function(data) { 
-			    console.log(data);
+			   // console.log(data);
 
 			    //print riding name
 
@@ -176,6 +198,8 @@ $('document').ready(function(){
 				$('.riding_content').append('Sorry, there was an error with your submission. Please try again.'); 
 			},
 		});	
+
+
 	}
 
 //IF THE USER HITS THE PAGE DIRECTLY, OR HAS PUT A POSTAL CODE INTO THE WIDGET
@@ -189,6 +213,6 @@ if (typeof riding != 'undefined'){
 }
 
 
-});
+//});
 
 });
