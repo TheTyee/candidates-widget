@@ -74,7 +74,7 @@ function urlify( withSpaces ){
 				jQuery.each(data.candidates_centroid, function(key, value){
 					switch(value.party_name) {
 				    case 'NDP':
-				        logo = '<img height="20" alt="'+value.party_name+'" src="/images/widget_logos/ndp-white.png"/>';
+				        logo = '<img height="20" alt="'+value.party_name+'" src="/images/widget_logos/NDP-white.png"/>';
 				        break;
 				    case 'Conservative':
 				         logo = '<img height="20" alt="'+value.party_name+'" src="/images/widget_logos/cons-white.png"/>';
