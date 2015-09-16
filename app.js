@@ -7,7 +7,28 @@ $('document').ready(function(){
 	var social; //object with social media links
 
 	$('button').click(function(){
+
 		
+		//Validation
+		jQuery.validator.addMethod("cdnPostal", function(postal, element) {
+		    return this.optional(element) || 
+		    postal.match(/[a-zA-Z][0-9][a-zA-Z](-| |)[0-9][a-zA-Z][0-9]/);
+		}, "Please specify a valid postal code.");
+
+		$("#home-form").validate({
+		        rules: {
+		            riding: {
+		              required: true,
+		              cdnPostal: true
+		          }
+		        },
+		        messages: {
+		            riding: "Please enter a valid postal code"
+
+		        }
+		    })
+
+				
 		//clear any cruft on each click
 		$('#candidates_info').empty();
 		$('#riding_info').empty();
