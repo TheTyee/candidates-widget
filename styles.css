@@ -1,8 +1,8 @@
-.candidate {
-	width: 20%;
-	float: left;
+.widget-credit {
+	background-color: #000;
+	color: #fff;
 }
 
-img {
-	max-width: 100%;
+.widget-credit img {
+	height: 40px;
 }
