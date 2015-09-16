@@ -21,7 +21,11 @@ $('document').ready(function(){
 	retrieveResults = 'http://dev.housingfix.tyeesolutions.org/candidates';
 	
 	//find a candidate 
+<<<<<<< Updated upstream
      widget_markup = '<aside class="widget-credit">Powered by <a href="http://opennorth.ca" target="_blank"><img src="http://dev.housingfix.tyeesolutions.org/images/logos/open_north_rev.png"/></a></aside>';
+=======
+     widget_markup = '<aside class="widget-credit">Powered by <a href="http://opennorth.ca" target="_blank">image</a></aside>';
+>>>>>>> Stashed changes
      widget_markup = widget_markup + '<div class="widget-inputs">';
      widget_markup = widget_markup + '<h3>Find federal candidates in your riding</h3>';
      widget_markup = widget_markup +  '<form id="home-form" name="home-form">'; 
