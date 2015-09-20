@@ -16,7 +16,7 @@ $('document').ready(function(){
 
 	//not currently necessary, but am plannign ahead for adding options to the widget
 	var retrieveResults;
-	retrieveResults = 'http://dev.housingfix.tyeesolutions.org/candidates/';
+	retrieveResults = '/candidates/';
 	
 	//generate jQuery widget
      widget_markup = '<aside class="widget-credit">Powered by <a href="http://opennorth.ca" target="_blank"><img src="http://dev.housingfix.tyeesolutions.org/images/logos/open_north_rev.png"/></a></aside>';
