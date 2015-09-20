@@ -66,7 +66,7 @@ $('document').ready(function(){
 
 		//put the postal code in a variable
 		riding = GetURLParameter('riding');
-
+console.log(riding);
 		//URL-ify the postal code
 		function urlify( withSpaces ){
 			var str = withSpaces;
@@ -89,10 +89,11 @@ $('document').ready(function(){
 			//if riding has a value, rename to be postal code
 			riding = GetURLParameter('riding');
 			//make it upper case
+			postalCode = riding;
 			postalCode = postalCode.toUpperCase();
 			//strip the spaces
 			postalCode = postalCode.replace('+', '');
-			//console.log(postalCode);
+			console.log(postalCode);
 			//API request
 			$.ajax({
 				//find the endpoint for the request postal code
@@ -172,6 +173,7 @@ $('document').ready(function(){
 					}
 				    candidateContents =	candidateContents + '</ul>';
 				    candidateContents =	candidateContents + '</div>';
+				    console.log(candidateContents);
 
 				    if (key ==3){
 				    	console.log(key %3);
@@ -187,6 +189,7 @@ $('document').ready(function(){
 					$('.riding_content').append('Sorry, there was an error with your submission. Please try again.'); 
 				},
 			});	
-		}
-
+			
+	}
+getRidingInfo();
 });
