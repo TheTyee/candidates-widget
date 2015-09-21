@@ -65,13 +65,14 @@ $('document').ready(function(){
 		}
 
 		//put the postal code in a variable
-		riding = GetURLParameter('riding');
+		postalCode = GetURLParameter('riding');
+		//console.log(riding);
 		//URL-ify the postal code
-		/*function urlify( withSpaces ){
+		function urlify( withSpaces ){
 			var str = withSpaces;
 			str = str.replace(/\s+/g, '-').toLowerCase();
 			return str;
-		}*/
+		}
 
 		
 		//clear any cruft on each click
@@ -80,10 +81,7 @@ $('document').ready(function(){
 
 		// feed the Postal Code into the API
 		function getRidingInfo(postalCode){	
-			//if riding has a value, rename to be postal code
-			riding = GetURLParameter('riding');
 			//make it upper case
-			postalCode = riding;
 			postalCode = postalCode.toUpperCase();
 			//strip the spaces
 			postalCode = postalCode.replace('+', '');
@@ -99,7 +97,7 @@ $('document').ready(function(){
 			    crossDomain: true,
 			    dataType: 'jsonp',
 			    success: function(data) { 
-			   // console.log(data);
+			    console.log(data);
 			   //check to see if riding name has already been rendered; if not, print it
 			  	var alreadyPrinted;
 			  	alreadyPrinted = false;
@@ -185,10 +183,8 @@ $('document').ready(function(){
 
 
 			});	
-			if (postalCode != undefined){
-		alert();
-		getRidingInfo();
-	}
-	}
-	
+		}
+	if(typeof postalCode !== "undefined")	{
+	getRidingInfo(postalCode);
+}
 });
