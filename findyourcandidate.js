@@ -66,24 +66,18 @@ $('document').ready(function(){
 
 		//put the postal code in a variable
 		riding = GetURLParameter('riding');
-console.log(riding);
 		//URL-ify the postal code
-		function urlify( withSpaces ){
+		/*function urlify( withSpaces ){
 			var str = withSpaces;
 			str = str.replace(/\s+/g, '-').toLowerCase();
 			return str;
-		}
+		}*/
 
 		
 		//clear any cruft on each click
 		$('#candidates_info').empty();
 		$('#riding_info').empty();
-		
-		//get the postal code
-		postalCode = $('#riding_pc').val();
-		//capitalize it
-		postalCode = postalCode.toUpperCase();
-		
+
 		// feed the Postal Code into the API
 		function getRidingInfo(postalCode){	
 			//if riding has a value, rename to be postal code
@@ -93,7 +87,7 @@ console.log(riding);
 			postalCode = postalCode.toUpperCase();
 			//strip the spaces
 			postalCode = postalCode.replace('+', '');
-			console.log(postalCode);
+			//console.log(postalCode);
 			//API request
 			$.ajax({
 				//find the endpoint for the request postal code
@@ -188,8 +182,13 @@ console.log(riding);
 				error: function() { 
 					$('.riding_content').append('Sorry, there was an error with your submission. Please try again.'); 
 				},
+
+
 			});	
-			
+			if (postalCode != undefined){
+		alert();
+		getRidingInfo();
 	}
-getRidingInfo();
+	}
+	
 });
